@@ -88,9 +88,73 @@ body{
   &__content__title{
     font-size: 32px;
     text-align: center;
+
+    margin-bottom: 30px;
   }
 
   &_empty{
     text-align: center;
   }
+
+  &_items{
+    border: 2px rgba(108,99,255,.3) solid ;
+    border-radius: 50px;
+    padding: 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    cursor: pointer;
+
+    transition: border .5s ease-in-out;
+  }
+
+  &_title{
+    margin-bottom: 20px;
+    padding-bottom: 5px;
+
+   
+  }
+
+
+  &_btn{
+    display: flex;
+    gap: 10px;
+
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+
+    transition: opacity .5s ease-in-out, visibility .5s ease-in-out, transform .5s ease-in-out ;
+
+  }
+
+  &_check{
+    accent-color:#6C63FF; /* Цвет фона активного чекбокса и галочки */
+  width: 20px;
+  height: 20px;
+  }
+
+  &_items:hover{
+
+    border: 2px rgb(108,99,255) solid;
+  }
+
+
+  &_items:hover > &_btn{
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(10px);
+  }
+
+
+  &_edit:hover svg path{
+    stroke: #6C63FF;
+  }
+
+  &_delete:hover svg path{
+     stroke: #E50000;
+  }
+
 }
