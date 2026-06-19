@@ -2,40 +2,20 @@ import "./style.scss";
 import Search from './assets/Search.svg'
 import TodoList from "./TodoList";
 import { useEffect, useState } from "react";
-import { data } from "react-router-dom";
+import {useSelector, useDispatch} from 'react-redux'
+import { fetchPosts } from "./store/todoSlice";
+// import { data } from "react-router-dom";
 
 function Todo() {
-
-    const[post,setPost] = useState({})
-
-    async function getPost() {
-
-        try {
-            
-            const res = await fetch('http://localhost:3000/posts')
-            const data = await res.json()
-
-            if(!res.ok) {
-                let message = 'Ошибка'
-                throw new Error(message)
-            }
-
-            setPost(data)
-           
-            
-            
-            
-        } catch (error) {
-
-            console.log("Error", error);
-            
-            
-        }
-    }
     
+    const dispatch = useDispatch()
+    const {status,error} = useSelector(state => state.posts) 
+   
+
+  
     useEffect(() => {
-        getPost()
-    },[])
+       dispatch(fetchPosts())
+    },[dispatch])
     
 
   return (
@@ -54,9 +34,12 @@ function Todo() {
         </select>
       </div>
 
+      
+
       {/* Здесь будут задачи */}
       <div className="todo__content">
-        <TodoList post={post} />
+        {status === 'loading' && <h2>Loading...</h2>}
+        <TodoList />
       </div>
     </div>
   );
