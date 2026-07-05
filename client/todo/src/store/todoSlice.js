@@ -28,7 +28,7 @@ export const fetchPosts = createAsyncThunk(
     }
 )
 
-export const addToPosts = createAsyncThunk(
+export const addToPost = createAsyncThunk(
     'posts/addToPosts',
     async function ({title,descr}, {rejectWithValue,dispatch}) {
 
@@ -42,7 +42,8 @@ export const addToPosts = createAsyncThunk(
             },
             body:JSON.stringify({
                 title:title,
-                descr:descr
+                descr:descr,
+                completed:false
             })
         })
 
@@ -50,9 +51,9 @@ export const addToPosts = createAsyncThunk(
             throw new Error('Can / t add the new posts' )
         }
 
-        const data = res.json()
+        const data = await res.json()
 
-        dispatch(addPost(data))
+        return data
             
         } catch (error) {
 
@@ -64,6 +65,66 @@ export const addToPosts = createAsyncThunk(
     }
 )
 
+export const deletePosts = createAsyncThunk(
+    'posts/deletePost',
+    async function (id,{rejectWithValue,dispatch}) {
+
+    try {
+
+        const res = await fetch(`http://localhost:3000/posts/${id}`,{
+            method:'DELETE',
+        }
+        )
+
+        if(!res.ok){
+            throw new Error('Can/t delete post')
+        }
+
+       return id
+
+          
+    } catch (error) {
+        return rejectWithValue(error.message)
+            
+    }
+    
+    }
+)
+
+export const toggleCompleted = createAsyncThunk (
+    'posts/toggleCompleted',
+    async function (id,{rejectWithValue,getState}) {
+
+         const state = getState() 
+        // Находим пост в текущем стейте Redux
+        const post = state.posts.posts.find(p => p.id === id)
+        try {
+
+            const res = await fetch(`http://localhost:3000/posts/${id}`, {
+                method:'PATCH',
+                headers: {
+                    'Content-type' : 'application/json'
+                },
+                body:JSON.stringify({
+                    completed: !post.completed
+                })
+            })
+
+            if(!res.ok){
+                throw new Error('Can/t toggle completed')
+            }
+
+            const data = await res.json()
+
+            return data
+            
+        } catch (error) {
+            return rejectWithValue(error.message)
+        }
+        
+    }
+)
+
 const todoSlice = createSlice({
     name:'posts',
     initialState: {
@@ -71,12 +132,14 @@ const todoSlice = createSlice({
         status: null,
         error: null,
     },
-    reducers: {
-        addPost(state,action){
-            state.posts.push(action.payload)
-
-        }
-    },
+    // reducers: {
+    //     addPost(state,action){
+    //         state.posts.push(action.payload)
+    //     },
+    //     deletePost(state,action){
+    //         state.posts = state.posts.filter(post => post.id !== action.payload.id)
+    //     }
+    // },
     extraReducers: (builder) => {
         builder
         .addCase(fetchPosts.pending,(state) => {
@@ -91,7 +154,29 @@ const todoSlice = createSlice({
             state.status = 'rejected'
             state.error = action.payload
         })
-        .addCase(addToPosts.rejected,(state,action) => {
+        .addCase(addToPost.fulfilled,(state,action) => {
+            state.status = 'resolved'
+            state.posts.push(action.payload)
+        })
+        .addCase(addToPost.rejected,(state,action) => {
+            state.status = 'rejected'
+            state.error = action.payload
+        })
+        .addCase(deletePosts.fulfilled, (state,action) => {
+            state.status = 'resolved'
+            state.posts = state.posts.filter(post => post.id !== action.payload)
+        })
+        .addCase(deletePosts.rejected, (state,action) => {
+            state.status = 'rejected'
+            state.error = action.payload
+        })
+        .addCase(toggleCompleted.fulfilled, (state, action) => {
+            const post = state.posts.find(post => post.id === action.meta.arg)
+            if (post) {
+                post.completed = !post.completed
+            }
+})
+        .addCase(toggleCompleted.rejected, (state,action) => {
             state.status = 'rejected'
             state.error = action.payload
         })
@@ -99,6 +184,6 @@ const todoSlice = createSlice({
 
 })
 
-const addPost = todoSlice.actions
+const {addPost, deletePost} = todoSlice.actions
 
 export default todoSlice.reducer

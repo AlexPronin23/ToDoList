@@ -3,7 +3,7 @@ import Edit from './assets/Edit.svg'
 import Delete from './assets/Delete.svg'
 import { useState } from 'react'
 import {useSelector,useDispatch} from 'react-redux'
-import {addToPosts} from './store/todoSlice'
+import {addToPost} from './store/todoSlice'
 import TodoItem from './TodoItem'
 
 const TodoList = ({post}) => {
@@ -22,7 +22,7 @@ const TodoList = ({post}) => {
             return
         }
 
-        dispatch(addToPosts({title,descr}))
+        dispatch(addToPost({title,descr}))
 
         setTitle('')
         setDescr('')
@@ -39,7 +39,7 @@ const TodoList = ({post}) => {
     {posts.length > 0 ? (
         <ul className="todo_list">
             {posts.map(posts => (
-                 <TodoItem key={posts.id} {...posts}/>
+                 <TodoItem key={posts.id} id={posts.id} {...posts}/>
             ))}
 
     

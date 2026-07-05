@@ -113,8 +113,14 @@ body{
 
     transition: border .5s ease-in-out;
 
-  margin-bottom: 20px;
+    margin-bottom: 20px;
   }
+
+  &_items.completed{
+    text-decoration: line-through;
+    opacity: .5;
+  }
+
 
   &_title{
     margin-bottom: 20px;
@@ -142,6 +148,12 @@ body{
     height: 20px;
   }
 
+
+  &_items > &_checked:checked{
+      text-decoration: line-through;
+  }
+
+ 
   &_items:hover{
 
     border: 2px rgb(108,99,255) solid;

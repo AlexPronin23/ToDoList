@@ -1,19 +1,10 @@
 {
   "posts": [
     {
-      "title": "Сделать домашку",
-      "descr": "Сделать лабу по ООАП",
-      "id": "S-udwxYgbLg"
-    },
-    {
       "title": "Пойти в зал",
-      "descr": "Сделать день груди",
-      "id": "NUbrCIZhsTg"
-    },
-    {
-      "title": "Пойти в универ",
-      "descr": "Сдать лабу",
-      "id": "Y8LmlEfPl1w"
+      "descr": "сделать грудь",
+      "id": "9qnW9sG_M40",
+      "completed": false
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

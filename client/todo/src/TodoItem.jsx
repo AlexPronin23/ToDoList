@@ -1,9 +1,20 @@
+import {useDispatch} from 'react-redux'
+import { useState } from 'react';
+import {deletePosts, toggleCompleted} from './store/todoSlice'
+const TodoItem = ({title,descr,id,completed}) => {
 
-const TodoItem = ({key,title,descr}) => {
+    const dispatch = useDispatch()
 
+    // const togglePostCompleted = (id) => {
+    //     dispatch(toggleCompleted(id))
+    //     console.log('Все ок');
+        
+    // }
+    
+    // const [completed,setCompleted] = useState(false)
 
     return (
-             <li key={key} className="todo_items">
+             <li key={id} className={`todo_items ${completed ? 'completed' : ''}`}>
 
                 <div className="todo_text">
 
@@ -14,7 +25,7 @@ const TodoItem = ({key,title,descr}) => {
             
                 <div className="todo_btn">
 
-                    <input type="checkbox" className='todo_check' />
+                    <input type="checkbox" className='todo_check' checked={completed} onChange={() => dispatch(toggleCompleted(id))} />
 
                     <button className="todo_edit">
                       <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -23,7 +34,7 @@ const TodoItem = ({key,title,descr}) => {
 
                     </button>
                     
-                    <button className="todo_delete">
+                    <button className="todo_delete" onClick={() => dispatch(deletePosts(id))}>
                         <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M3.87414 7.61505C3.80712 6.74386 4.49595 6 5.36971 6H12.63C13.5039 6 14.1927 6.74385 14.1257 7.61505L13.6064 14.365C13.5463 15.1465 12.8946 15.75 12.1108 15.75H5.88894C5.10514 15.75 4.45348 15.1465 4.39336 14.365L3.87414 7.61505Z" stroke="#CDCDCD"/>
 <path d="M14.625 3.75H3.375" stroke="#CDCDCD" stroke-linecap="round"/>
