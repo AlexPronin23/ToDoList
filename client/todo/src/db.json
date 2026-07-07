@@ -1,10 +1,10 @@
 {
   "posts": [
     {
-      "title": "Пойти в зал",
-      "descr": "сделать грудь",
-      "id": "9qnW9sG_M40",
-      "completed": false
+      "title": "Сделать домашку",
+      "descr": "аааа",
+      "completed": false,
+      "id": "4f7DSRht0FI"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

@@ -125,6 +125,41 @@ export const toggleCompleted = createAsyncThunk (
     }
 )
 
+export const editPosts = createAsyncThunk(
+    'posts/editPosts',
+    async function ({id,title,descr}, {rejectWithValue,getState}) {
+
+        const state = getState()
+        const post = state.posts.posts.find(p => p.id === id)
+
+        try {
+
+            const res = await fetch(`http://localhost:3000/posts/${id}`, {
+                method:'PATCH',
+                headers:{
+                    'Content-Type': 'application/json'
+                },
+                body:JSON.stringify({
+                    title:title,
+                    descr:descr
+                })
+            })
+
+            if(!res.ok) {
+                throw new Error('Can/t edit your post')
+            }
+
+            const data = await res.json()
+
+            return data
+            
+        } catch (error) {
+            return rejectWithValue(error.message)
+        }
+        
+    }
+)
+
 const todoSlice = createSlice({
     name:'posts',
     initialState: {
@@ -179,6 +214,18 @@ const todoSlice = createSlice({
         .addCase(toggleCompleted.rejected, (state,action) => {
             state.status = 'rejected'
             state.error = action.payload
+        })
+        .addCase(editPosts.fulfilled, (state, action) => {
+    const updatedPost = action.payload
+    const index = state.posts.findIndex(p => p.id === updatedPost.id)
+    if (index !== -1) {
+        // Полностью заменяем пост данными с сервера
+        state.posts[index] = updatedPost
+    }
+})
+        .addCase(editPosts.rejected, (state,action) => {
+            state.status = 'rejected'
+            action.error = action.payload
         })
     }
 
