@@ -6,9 +6,9 @@ import {useSelector,useDispatch} from 'react-redux'
 import {addToPost} from './store/todoSlice'
 import TodoItem from './TodoItem'
 
-const TodoList = ({post}) => {
+const TodoList = ({filteredPost}) => {
 
-    const posts = useSelector(state => state.posts.posts)
+    // const posts = useSelector(state => state.posts.posts)
     const dispatch = useDispatch()
 
     const[open,setOpen] = useState(false)
@@ -36,10 +36,10 @@ const TodoList = ({post}) => {
     
     <h1 className="todo__content__title">Ваши задачи:</h1>
 
-    {posts.length > 0 ? (
+    {filteredPost.length > 0 ? (
         <ul className="todo_list">
-            {posts.map(posts => (
-                 <TodoItem key={posts.id} id={posts.id} {...posts}/>
+            {filteredPost.map(filteredPost => (
+                 <TodoItem key={filteredPost.id} id={filteredPost.id} {...filteredPost}/>
             ))}
 
     

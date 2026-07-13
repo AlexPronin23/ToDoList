@@ -1,4 +1,4 @@
-import {createSlice,createAsyncThunk} from '@reduxjs/toolkit'
+import {createSlice,createAsyncThunk, createSelector} from '@reduxjs/toolkit'
 
 
 export const fetchPosts = createAsyncThunk(
@@ -166,15 +166,13 @@ const todoSlice = createSlice({
         posts:[],
         status: null,
         error: null,
+        filter:'all'
     },
-    // reducers: {
-    //     addPost(state,action){
-    //         state.posts.push(action.payload)
-    //     },
-    //     deletePost(state,action){
-    //         state.posts = state.posts.filter(post => post.id !== action.payload.id)
-    //     }
-    // },
+    reducers: {
+       setFilter: (state,action) => {
+        state.filter = action.payload
+       }
+    },
     extraReducers: (builder) => {
         builder
         .addCase(fetchPosts.pending,(state) => {
@@ -227,10 +225,33 @@ const todoSlice = createSlice({
             state.status = 'rejected'
             action.error = action.payload
         })
+
+
     }
 
 })
 
+export const selectFilteredPosts = createSelector(
+    [(state) => state.posts.posts, (state) => state.posts.filter],
+    (posts,filter) => {
+        switch (filter) {
+            case 'complete':
+                return posts.filter(p => p.completed === true)
+                break;
+
+            case 'incomplete':
+                return posts.filter(p => p.completed === false)
+                break;
+        
+            case 'all':
+            default:
+                return posts
+                break;
+        }
+    }
+)
+
 const {addPost, deletePost} = todoSlice.actions
+export const{setFilter} = todoSlice.actions
 
 export default todoSlice.reducer

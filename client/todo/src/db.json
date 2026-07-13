@@ -3,8 +3,26 @@
     {
       "title": "Сделать домашку",
       "descr": "аааа",
-      "completed": false,
+      "completed": true,
       "id": "4f7DSRht0FI"
+    },
+    {
+      "title": "fsfsf",
+      "descr": "sfsfsf",
+      "completed": false,
+      "id": "XkFUujiubYo"
+    },
+    {
+      "title": "dfsfs",
+      "descr": "afgafafafa",
+      "completed": false,
+      "id": "M2Lc-SSC0EM"
+    },
+    {
+      "title": "afafaf",
+      "descr": "afafafafaf",
+      "completed": false,
+      "id": "h3Tzb7Nw0ic"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
