@@ -12,25 +12,9 @@ function Todo() {
     const {status,error} = useSelector(state => state.posts)
     const filteredPost = useSelector(selectFilteredPosts)
     const filter = useSelector(state => state.posts.filter)
-
-
-    // const handleStateList = () => {
-    //   switch (selectedValue) {
-    //     case 'complete':
-    //       return posts.filter(post => post.completed === true)
-    //       break;
-
-    //     case 'incomplete':
-    //       return posts.filter(post => post.completed === false )
-      
-    //     case 'all':
-
-    //     default:
-    //       return posts
-    //       break;
-    //   }
-    // }
-     
+    const [searchQuery, setSearchQuery] = useState('') // Что ввел пользователь
+    const [searchResult, setSearchResult] = useState([]) // Результат поиска
+    
   
     useEffect(() => {
        dispatch(fetchPosts())
@@ -38,8 +22,24 @@ function Todo() {
     
 
  
-    
-    // const filteredPost = handleStateList()
+     const handleSearch = () => {
+        if (!searchQuery.trim()) {
+            setSearchResult([]) // Если ничего не ввели - показываем все
+            return
+        }
+
+        const query = searchQuery.toLowerCase().trim()
+        const result = filteredPost.filter(post => 
+            post.title.toLowerCase().includes(query)
+        )
+        setSearchResult(result)
+    }
+
+
+    // Что показывать: результат поиска или все посты
+    const postsToShow = searchResult.length > 0 || searchQuery.trim() === '' 
+        ? (searchResult.length > 0 ? searchResult : filteredPost)
+        : filteredPost
 
     
 
@@ -49,8 +49,10 @@ function Todo() {
 
       <div className="todo__head">
         <div className="todo__search">
-          <input type="text" placeholder="Search note..." />
+          <input value={searchQuery} type="text" placeholder="Search note..."  onChange={(e) => setSearchQuery(e.target.value)}/>
         </div>
+
+        <button className="todo__searching" onClick={handleSearch}>Search</button>
 
         <select value={filter} onChange={(e) => dispatch(setFilter(e.target.value))} className="todo__filter">
           <option value='all'>ALL</option>
@@ -64,7 +66,7 @@ function Todo() {
       {/* Здесь будут задачи */}
       <div className="todo__content">
         {status === 'loading' && <h2>Loading...</h2>}
-        <TodoList  filteredPost = {filteredPost} />
+        <TodoList  filteredPost = {postsToShow} />
       </div>
     </div>
   );

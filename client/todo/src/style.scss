@@ -18,8 +18,24 @@ body{
 
   &__head {
     display: flex;
-    gap: 16px;
+    gap: 30px;
     align-items: center;
+  }
+
+  &__searching{
+
+     background-color: #6c63ff;
+     color: #FFFF;
+
+     padding: 12px 16px;
+     border-radius: 8px;
+
+     transition: background-color .5s ease-in-out;
+
+  }
+
+  &__searching:hover{
+    background-color: #534CC2;
   }
 
   &__search {
